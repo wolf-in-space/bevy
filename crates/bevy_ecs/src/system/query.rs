@@ -1957,3 +1957,21 @@ impl<'w, 's, D: QueryData, F: QueryFilter> Populated<'w, 's, D, F> {
         self.0
     }
 }
+
+impl<'w, 's, D: QueryData, F: QueryFilter> IntoIterator for &'w Populated<'w, 's, D, F> {
+    type Item = ROQueryItem<'w, D>;
+    type IntoIter = QueryIter<'w, 's, D::ReadOnly, F>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.iter()
+    }
+}
+
+impl<'w, 's, D: QueryData, F: QueryFilter> IntoIterator for &'w mut Populated<'w, 's, D, F> {
+    type Item = D::Item<'w>;
+    type IntoIter = QueryIter<'w, 's, D, F>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.iter_mut()
+    }
+}
